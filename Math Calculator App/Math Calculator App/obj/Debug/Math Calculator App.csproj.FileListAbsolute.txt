@@ -1,0 +1,8 @@
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\bin\Debug\Math Calculator App.exe.config
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\bin\Debug\Math Calculator App.exe
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\bin\Debug\Math Calculator App.pdb
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\obj\Debug\Math Calculator App.csproj.AssemblyReference.cache
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\obj\Debug\Math Calculator App.csproj.SuggestedBindingRedirects.cache
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\obj\Debug\Math Calculator App.csproj.CoreCompileInputs.cache
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\obj\Debug\Math Calculator App.exe
+C:\Users\HP\source\repos\Math Calculator App\Math Calculator App\obj\Debug\Math Calculator App.pdb
