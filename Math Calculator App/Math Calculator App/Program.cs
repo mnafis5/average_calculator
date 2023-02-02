@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Math_Calculator_App
 {
@@ -13,6 +16,7 @@ namespace Math_Calculator_App
         static void Main(string[] args)
         {
             var histories = new List<History>();
+           
             while (true)
             {
                 Console.WriteLine("WELCOME TO THE AVE APP!");
@@ -22,21 +26,25 @@ namespace Math_Calculator_App
                 Console.WriteLine("1. Average Calculation");
                 Console.WriteLine("2. Pytagoras Calculation");
                 Console.WriteLine("3. History");
-                Console.WriteLine("4. Exit");
+                Console.WriteLine("4. Save");
+                Console.WriteLine("5. Exit");
                 Console.Write("Guest>>");
-                int choice = Convert.ToInt32(Console.ReadLine());
-                //handling the input
-                if (choice == 1)
+
+                var choice = Convert.ToInt32(Console.ReadLine());
+                //ndling the input
+                switch (choice)
                 {
-                    Console.Write("Guest>>average>>");
-                    string av_inp = Console.ReadLine();
-                    Calculation average = new Average();
-                    average.Calculate(av_inp);
-                    double av_his = average.Av_his();
-                    var av_out = av_inp + " = " + Convert.ToString(av_his);
-                    histories.Add(new History { Average = av_out });
-                }else if( choice == 2)
-                {
+                    case 1:
+                        Console.Write("Guest>>average>>");
+                        string av_inp = Console.ReadLine();
+                        Calculation average = new Average();
+                        average.Calculate(av_inp);
+                        double av_his = average.Av_his();
+                        var av_out = av_inp + " = " + Convert.ToString(av_his);
+                        histories.Add(new History { Average = av_out });
+
+                        break;
+                    case 2:
                         Console.WriteLine("1. Determine the longest line");
                         Console.WriteLine("2. Determine the normal line");
                         Console.Write("Guest>>Pytagoras>>");
@@ -50,7 +58,7 @@ namespace Math_Calculator_App
                             double py_max_inp_his = Convert.ToDouble(inp_py);
                             double py_his = pytagoras.Pyta_max_his();
                             string py_out = inp_py + " = " + Convert.ToString(py_his);
-                            histories.Add(new History { Pytagoras = py_out});
+                            histories.Add(new History { Pytagoras = py_out });
                         }
                         else
                         {
@@ -62,29 +70,35 @@ namespace Math_Calculator_App
                             double py_his = pytagoras1.Pyta_min_his();
                             string py_out = inp_py + " = " + Convert.ToString(py_his);
                             histories.Add(new History { Pytagoras_min = py_out });
-                    }
-                }else if(choice == 3)
-                {
-                    Console.WriteLine("the List of inputten numbers and the results: ");
-                    Console.WriteLine(".............................................");
- 
-                      foreach(var history in histories)
-                    {
-                        Console.WriteLine(history.Average);
-                        Console.WriteLine(history.Pytagoras);
-                        Console.WriteLine(history.Pytagoras_min);
-                    }
-                }else if(choice == 4)
-                {
-                    Console.WriteLine("See you again, bye!");
-                    break;
+                        }
+                        break;
+                    case 3:
+                        Console.WriteLine("the List of inputten numbers and the results: ");
+                        Console.WriteLine(".............................................");               
+                            foreach (var history in histories)
+                            {
+                                Console.Write($"{history.Average}\n{history.Pytagoras}\n{history.Pytagoras_min}");
+                            }                     
+                        break;
+                    case 4:
+                        Console.Write("Input filename: ");
+                        string input = Console.ReadLine();
+                        File_ save = new File_(input);
+                        break;
+                    case 5:
+                        Console.WriteLine("See you again, bye!");
+                        Environment.Exit(0);
+                        break;
+
+                    default:
+                        Console.WriteLine("input invalid");
+                        break;
                 }
-                else
-                {
-                       Console.WriteLine("input invalid");
-                }                                                             
-               
-                
+
+
+
+
+
             }
         }
 
@@ -118,7 +132,7 @@ namespace Math_Calculator_App
         }
         class Average : Calculation
         {
-            
+
             public override void Calculate(string input)
             {
                 //split the coma and convert to char
@@ -137,7 +151,7 @@ namespace Math_Calculator_App
 
                 avrg = num;
             }
-            
+
 
         }
 
@@ -154,7 +168,7 @@ namespace Math_Calculator_App
                 double res = (int)Math.Sqrt(numbers[0] * numbers[0] + numbers[1] * numbers[1]);
                 res = Math.Round(res, 4);
 
-               pyta_max = res;
+                pyta_max = res;
                 Console.WriteLine(res + " cm");
             }
 
@@ -176,13 +190,54 @@ namespace Math_Calculator_App
 
         }
 
-        class History 
+        class History
         {
-           public string Average { get; set; }
-           public string Pytagoras { get; set; }
-           public string Pytagoras_min { get; set; }
+            public string Average { get; set; }
+            public string Pytagoras { get; set; }
+            public string Pytagoras_min { get; set; }
+        }
+
+        class File_ : History
+        {
+            public static string filename;
+            public File_(string input)
+            {
+                //input the input filename variable
+                filename = input;
+
+                //Join the History properties
+                string text = $"{Average}\n{Pytagoras}\n{Pytagoras_min}";
+
+                //Write to the file
+                if (filename != null)
+                {
+                    if (text.Length > 0)
+                    {
+                        using (var writer = new StreamWriter(filename+".txt"))
+                        {
+                            writer.Write(text);
+                        }
+                        Console.WriteLine("Data saved");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No data stored");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Input the filename first!");
+                }
+
+            }
+
+            
+
+            
 
         }
+
+
 
     }
 }
